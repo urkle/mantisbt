@@ -157,7 +157,7 @@
 
 	# Check if the admin directory is available and is readable.
 	$t_admin_dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR;
-	if ( is_dir( $t_admin_dir ) && is_readable( $t_admin_dir ) ) {
+	if ( is_dir( $t_admin_dir ) && is_executable( $t_admin_dir ) ) {
 		echo '<div class="warning" align="center">', "\n";
 		echo '<p><font color="red"><strong>WARNING:</strong> Admin directory should be removed.</font></p>', "\n";
 		echo '</div>', "\n";
