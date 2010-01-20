@@ -721,6 +721,7 @@
 			$t_project_table			= config_get( 'mantis_project_table' );
 			$t_project_user_list_table	= config_get( 'mantis_project_user_list_table' );
 			$t_project_hierarchy_table	= config_get( 'mantis_project_hierarchy_table' );
+			$t_user_table				= config_get( 'mantis_user_table' );
 
 			$t_public	= VS_PUBLIC;
 			$t_private	= VS_PRIVATE;
@@ -732,8 +733,11 @@
 					    ON p.id=u.project_id AND u.user_id=$c_user_id
 					  LEFT JOIN $t_project_hierarchy_table ph
 					    ON ph.child_id = p.id
+					  JOIN $t_user_table ut
+					    ON ut.id = $c_user_id
 					  WHERE $t_enabled_clause
-						( p.view_state='$t_public'
+						( ( p.view_state='$t_public'
+						    AND ut.access_level > 0)
 						    OR (p.view_state='$t_private'
 							    AND
 						        u.user_id='$c_user_id' )
