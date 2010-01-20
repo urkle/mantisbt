@@ -862,6 +862,7 @@ function user_get_accessible_projects( $p_user_id, $p_show_disabled = false ) {
 		$t_project_table = db_get_table( 'mantis_project_table' );
 		$t_project_user_list_table = db_get_table( 'mantis_project_user_list_table' );
 		$t_project_hierarchy_table = db_get_table( 'mantis_project_hierarchy_table' );
+		$t_user_table = db_get_table( 'mantis_user_table' );
 
 		$t_public = VS_PUBLIC;
 		$t_private = VS_PRIVATE;
@@ -874,14 +875,17 @@ function user_get_accessible_projects( $p_user_id, $p_show_disabled = false ) {
 						    ON p.id=u.project_id AND u.user_id=" . db_param() . "
 						  LEFT JOIN $t_project_hierarchy_table ph
 						    ON ph.child_id = p.id
+						  JOIN $t_user_table ut
+						    ON ut.id = " . db_param() . "
 						  WHERE " . ( $p_show_disabled ? '' : ( 'p.enabled = ' . db_param() . ' AND ' ) ) . "
-							( p.view_state=" . db_param() . "
+							( ( p.view_state=" . db_param() . "
+								AND ut.access_level > 0)
 							    OR (p.view_state=" . db_param() . "
 								    AND
 							        u.user_id=" . db_param() . " )
 							)
 			  ORDER BY p.name";
-		$result = db_query_bound( $query, ( $p_show_disabled ? Array( $p_user_id, $t_public, $t_private, $p_user_id ) : Array( $p_user_id, true, $t_public, $t_private, $p_user_id ) ) );
+		$result = db_query_bound( $query, ( $p_show_disabled ? Array( $p_user_id, $p_user_id, $t_public, $t_private, $p_user_id ) : Array( $p_user_id, $p_user_id, true, $t_public, $t_private, $p_user_id ) ) );
 
 		$row_count = db_num_rows( $result );
 
