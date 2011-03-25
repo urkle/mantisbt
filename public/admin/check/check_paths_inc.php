@@ -38,10 +38,6 @@ check_print_section_header_row( 'Paths' );
 
 $t_path_config_names = array(
 	'absolute_path',
-	'core_path',
-	'class_path',
-	'library_path',
-	'language_path'
 );
 
 # Handle file upload default path only if attachments stored on disk
@@ -50,6 +46,7 @@ if( DISK == config_get_global( 'file_upload_method' ) ) {
 }
 
 $t_paths = array();
+
 foreach( $t_path_config_names as $t_path_config_name ) {
 	$t_new_path = array();
 	$t_new_path['config_value'] = config_get_global( $t_path_config_name );
@@ -88,11 +85,8 @@ if( $g_failed_test ) {
 	return;
 }
 
+# The entire app has been removed from the web tree.  Moveable paths are now only configurable via webserver conf
 $t_moveable_paths = array(
-	'core_path',
-	'class_path',
-	'library_path',
-	'language_path'
 );
 
 if( $t_paths['absolute_path']['real_path'] !== false ) {
