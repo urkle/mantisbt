@@ -49,6 +49,7 @@
  */
 
 use MantisBT\Exception\Access\AccessDenied;
+use MantisBT\Exception\Database\ColumnNotFound;
 use MantisBT\Exception\Field\EmptyField;
 use MantisBT\Exception\Issue\IssueDuplicateSelf;
 use MantisBT\Exception\Issue\IssueNotFound;
@@ -1194,8 +1195,7 @@ function bug_get_field( $p_bug_id, $p_field_name ) {
 	if( isset( $row[$p_field_name] ) ) {
 		return $row[$p_field_name];
 	} else {
-		error_parameters( $p_field_name );
-		trigger_error( ERROR_DB_FIELD_NOT_FOUND, WARNING );
+		throw new ColumnNotFound( $p_field_name );
 		return '';
 	}
 }
@@ -1214,8 +1214,7 @@ function bug_get_text_field( $p_bug_id, $p_field_name ) {
 	if( isset( $row[$p_field_name] ) ) {
 		return $row[$p_field_name];
 	} else {
-		error_parameters( $p_field_name );
-		trigger_error( ERROR_DB_FIELD_NOT_FOUND, WARNING );
+		throw new ColumnNotFound( $p_field_name );
 		return '';
 	}
 }
@@ -1385,7 +1384,7 @@ function bug_set_field( $p_bug_id, $p_field_name, $p_value ) {
 			break;
 
 		default:
-			trigger_error( ERROR_DB_FIELD_NOT_FOUND, WARNING );
+			throw new ColumnNotFound( $p_field_name );
 			break;
 	}
 
